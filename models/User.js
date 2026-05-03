@@ -12,9 +12,13 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum:["admin","user"],
+        enum:["admin","provider","user"],
         default: "user",
-    },   
+    }, 
+    subscription: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Subscription",
+},  
 },{timestamps : true});
 
 module.exports = mongoose.model("User",userSchema);

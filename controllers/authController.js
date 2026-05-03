@@ -5,7 +5,7 @@ const jwt = require ("jsonwebtoken");
 // signup
 exports.signup = async (req, res) =>{
     try{
-        const {email ,password} = req.body;
+        const {email ,password,role} = req.body;
 
         // checking the user
         const existingUser = await User.findOne({email});
@@ -19,6 +19,7 @@ exports.signup = async (req, res) =>{
         const user = await User.create({
             email,
             password:hashedPassword,
+            role: role || "user",
         });
 
         res.status(201).json({
@@ -34,7 +35,7 @@ exports.signup = async (req, res) =>{
 // login
 exports.login = async(req ,res) =>{
     try{
-        const {email,password} = req.body
+        const {email,password,role} = req.body
 
         const user = await User.findOne({email});
         if(!user){
@@ -50,12 +51,16 @@ exports.login = async(req ,res) =>{
         const token =jwt.sign(
             {userId: user._id , role: user.role},
             process.env.JWT_SECRET,
-            {expiresIn: "7d"}
+            {expiresIn: "1d"}
         );
 
         res.json({
             message : "Login hogaya",
             token,
+            user: {
+            role: user.role,
+            email: user.email,
+            },
         });
     }catch(error){
         res.status(500).json({error: error.message});

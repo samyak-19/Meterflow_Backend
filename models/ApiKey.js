@@ -5,6 +5,11 @@ const apiKeySchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"Api",
     },
+
+    userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    },
     key:{
         type: String,
         required:true,
